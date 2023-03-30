@@ -3,6 +3,11 @@ uuid = "7d220c50-6298-48cd-9710-1d1a8ef13806"
 authors = ["JoelTrent <79883375+JoelTrent@users.noreply.github.com> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+Elliptic = "b305315f-e792-5b7a-8f41-49f472929428"
+Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
+
 [compat]
 julia = "1"
 
