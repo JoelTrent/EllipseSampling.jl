@@ -4,7 +4,7 @@ Pages = ["internal_libary.md"]
 
 # Internal Library
 
-Documentation for `structs` and functions not covered within user interface documentation ([User Interface](@ref))
+Documentation for `structs` and functions not covered within [User Interface](@ref) documentation.
 
 ## Structs
 
