@@ -7,6 +7,7 @@ version = "1.0.0-DEV"
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Elliptic = "b305315f-e792-5b7a-8f41-49f472929428"
 Roots = "f2b01f46-fcfa-551c-844a-d8ac1e96c665"
+SnoopPrecompile = "66db9d55-30c0-4569-8b51-7e840670fc0c"
 
 [compat]
 julia = "1"
