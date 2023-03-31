@@ -16,5 +16,11 @@ To install the package, use the following command inside the Julia REPL:
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/JoelTrent/Elliptic.jl")
+Pkg.add(url="https://github.com/JoelTrent/EllipseSampling.jl")
+```
+
+To load the package, use the command:
+
+```julia
+using EllipseSampling
 ```
