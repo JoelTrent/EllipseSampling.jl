@@ -75,13 +75,13 @@ The general equation for a rotated and translated ellipse is given by:
 
 Where:
 ```math
-A = (\\frac{\\cos^2(α)}{a^2} + \\frac{\\sin^2(α)}{b^2})
+A = \\bigg(\\frac{\\cos^2(α)}{a^2} + \\frac{\\sin^2(α)}{b^2}\\bigg)
 ```
 ```math
-B = 2\\cos(α)sin(α)(\\frac{1}{a^2} - \\frac{1}{b^2}x^2)
+B = 2\\cos(α)sin(α)\\bigg(\\frac{1}{a^2} - \\frac{1}{b^2}\\bigg)
 ```
 ```math
-C = (\\frac{\\sin^2(α)}{a^2} + \\frac{\\cos^2(α)}{b^2})
+C = \\bigg(\\frac{\\sin^2(α)}{a^2} + \\frac{\\cos^2(α)}{b^2}\\bigg)
 ```
 """
 function construct_ellipse(x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0) where T<:Float64
