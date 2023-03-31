@@ -70,18 +70,18 @@ Constructs a [`Ellipse`](@ref) `struct` which contains the information required 
 The general equation for a rotated and translated ellipse is given by:
 
 ```math
-1 = Ax^2 + Bxy + Cy^2
+1 = A(x-C_x)^2 + B(x-C_x)(y-C_y) + C(y-C_y)^2
 ```
 
 Where:
 ```math
-A = (\\frac{\\cos^2(α)}{a^2} + \\frac{\\sin^2(α)}{b^2})x^2
+A = (\\frac{\\cos^2(α)}{a^2} + \\frac{\\sin^2(α)}{b^2})
 ```
 ```math
-B = 2\\cos(α)sin(α)(\\frac{1}{a^2} - \\frac{1}{b^2}x^2)xy
+B = 2\\cos(α)sin(α)(\\frac{1}{a^2} - \\frac{1}{b^2}x^2)
 ```
 ```math
-C = (\\frac{\\sin^2(α)}{a^2} + \\frac{\\cos^2(α)}{b^2})y^2
+C = (\\frac{\\sin^2(α)}{a^2} + \\frac{\\cos^2(α)}{b^2})
 ```
 """
 function construct_ellipse(x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0) where T<:Float64
