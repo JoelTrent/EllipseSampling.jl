@@ -1,4 +1,16 @@
-function assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T)
+
+"""
+    assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T) where T<:Float64
+
+Asserts that the parameters relate to a valid ellipse. I.e. that `a ≥ b` and, `x_radius` and `y_radius` are positive. Note: `a=max(x_radius, y_radius), b=min(x_radius, y_radius)`.
+
+# Arguments
+- `a`: the major radius of the ellipse.
+- `b`: the minor radius of the ellipse.
+- `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
+- `y_radius`: radius of the ellipse in the y axis (i.e. when the rotation, `α`, is zero).
+"""
+function assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T) where T<:Float64
     
     @assert (a ≥ b) "The radius of the major axis, `a`, must be greater than or equal to the radius of the minor axis, `b`. I.e. `a=max(x_radius, y_radius), b=min(x_radius, y_radius)`."
     @assert (x_radius > 0) "The `x_radius` must be strictly positive `(>0)`."
