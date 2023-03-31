@@ -29,7 +29,7 @@ function t_from_arclength_general(arc_len::T, a::T, b::T, x_radius::T, y_radius:
 end
 
 function t_from_arclength_general(arc_len::Float64, e::Ellipse)
-    if x_radius < y_radius
+    if e.x_radius < e.y_radius
         return t_from_arclength(arc_len, e) + 0.5*pi
     else
         return t_from_arclength(arc_len, e) 
@@ -54,8 +54,10 @@ For example using:
 e = construct_ellipse(2,1)
 N = 100
 norm_samples = rand(N)
-points = generate_point_on_perimeter.(samples, e)
+points = generate_point_on_perimeter.(samples, Ref(e))
 ```
+
+Note, here we wrap the ellipse struct `e` in `Ref` so that Julia does not try to broadcast over `e` as well.
 
 Other distributions defined on [0,1] can be used to generate points on the ellipse's perimeter in a similar fashion.
 """
@@ -87,11 +89,11 @@ An alternative way to call [`generate_point_on_perimeter(norm_distance_on_perime
 function generate_point_on_perimeter(norm_distance_on_perimeter::T, x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0) where T<:Float64
 
     e = construct_ellipse(x_radius, y_radius, α, Cx, Cy)
-    return generate_point_on_perimeter(norm_distance_on_perimeter, e, )
+    return generate_point_on_perimeter(norm_distance_on_perimeter, e)
 end
 
 """
-    generate_point_on_perimeter(norm_distance_on_perimeter::T, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
+    generate_point_on_perimeter(norm_distance_on_perimeter::Float64, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
         confidence_level::Float64=0.01)
 
 An alternative way to call [`generate_point_on_perimeter(norm_distance_on_perimeter::Float64, e::Ellipse)`](@ref), by supplying a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest and the confidence level that represent a 2D ellipse approximation of the log-likelihood function.
@@ -106,7 +108,7 @@ An alternative way to call [`generate_point_on_perimeter(norm_distance_on_perime
 # Keyword Arguments
 - `confidence_level`: The confidence level ∈[0.0,1.0] at which the ellipse approximation is constructed. Default is `0.01`.
 """
-function generate_point_on_perimeter(norm_distance_on_perimeter::T, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
+function generate_point_on_perimeter(norm_distance_on_perimeter::Float64, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
     confidence_level::Float64=0.01)
 
     _, _, x_radius, y_radius, α = calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
@@ -141,7 +143,7 @@ function generateN_equally_spaced_points(num_points::Int, e::Ellipse;
     shift = start_point_shift/num_points
 
     lengths = collect(LinRange((shift)*e.circumference, (1+shift)*e.circumference, num_points+1))[1:end-1]
-    angles = t_from_arclength_general.(lengths, e)
+    angles = t_from_arclength_general.(lengths, Ref(e))
     
     for i in 1:num_points
         points[:,i] .= x_parametric_equation(angles[i], e), 

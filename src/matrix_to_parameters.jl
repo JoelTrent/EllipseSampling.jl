@@ -23,7 +23,7 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     @assert 0 < ind1 && ind1 ≤ size(Γ)[1] "`ind1` must be a valid row index in `Γ`." 
     @assert 0 < ind2 && ind2 ≤ size(Γ)[1] "`ind2` must be a valid row index in `Γ`." 
 
-    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (quantile(Distributions.Chisq(2), confidence_level)*0.5) # normalise Hw so that the RHS of the ellipse equation == 1
+    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5) # normalise Hw so that the RHS of the ellipse equation == 1
 
     α = atan(2*Hw[1,2]/(Hw[1,1]-Hw[2,2]))/2
     y_radius = sqrt( (cos(α)^4 - sin(α)^4) / (Hw[2,2]*(cos(α)^2) - Hw[1,1]*(sin(α)^2))  )
