@@ -17,7 +17,7 @@ makedocs(;
     pages=[
         "Home" => "index.md",
         "Tutorial" => "tutorial.md",
-        "User Interface" => "user_interface.md"
+        "User Interface" => "user_interface.md",
         "Internal Library" => "internal_library.md"
     ],
 )
