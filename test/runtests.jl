@@ -5,6 +5,10 @@ function equality_of_2D_coordinates(vec1::Vector{<:Float64}, vec2::Vector{<:Floa
     return ((abs(vec1[1]-vec2[1]) < 1e-14) + (abs(vec1[2]-vec2[2]) < 1e-14)) == 2
 end
 
+function equality_of_1D_coordinates(x1::Float64, x2::Float64)
+    return abs(x1-x2) < 1e-14
+end
+
 @testset "EllipseSampling.jl" begin
 
     @testset "NEquallySpacedPointsTest" begin
@@ -53,4 +57,27 @@ end
         @test equality_of_2D_coordinates(generate_point_on_perimeter(0.0, 1.0, 1.0, pi/2), [0.0, 1.0])
         @test equality_of_2D_coordinates(generate_point_on_perimeter(0.25, 1.0, 1.0, pi/2), [-1.0, 0.0])
     end
+
+    @testset "ParametricEquationsTest" begin
+        x_radius=1.0; y_radius=1.0; α=0.0; Cx=1.0
+        @test equality_of_1D_coordinates(x_parametric_equation(0.0, x_radius, y_radius, α, Cx), 2.0)
+        @test equality_of_1D_coordinates(x_parametric_equation(pi/2.0, x_radius, y_radius, α, Cx), 1.0)
+        @test equality_of_1D_coordinates(x_parametric_equation(pi*1.0, x_radius, y_radius, α, Cx), 0.0)
+
+        Cy=1.0
+        @test equality_of_1D_coordinates(y_parametric_equation(0.0, x_radius, y_radius, α, Cy), 1.0)
+        @test equality_of_1D_coordinates(y_parametric_equation(pi/2.0, x_radius, y_radius, α, Cy), 2.0)
+        @test equality_of_1D_coordinates(y_parametric_equation(pi*1.0, x_radius, y_radius, α, Cy), 1.0)
+    end
+
+    @testset "TFromArcLengthTest" begin
+        a=1.0; b=1.0; x_radius=1.0; y_radius=1.0
+        @test equality_of_1D_coordinates(t_from_arclength_general(pi/2.0, a, b, x_radius, y_radius), pi/2.0)
+        @test equality_of_1D_coordinates(t_from_arclength_general(pi*1.0, a, b, x_radius, y_radius), pi*1.0)
+    end
+
+    # @testset "CalculateEllipseParametersTest" begin
+    #     calculate_ellipse_parameters() # or use the generateN_equally_spaced_points(Γ) version
+    # end
+
 end
