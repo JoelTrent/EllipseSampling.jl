@@ -86,7 +86,7 @@ For example using:
 using EllipseSampling
 e = construct_ellipse(2,1)
 N = 100
-norm_samples = rand(N)
+samples = rand(N)
 points = generate_point_on_perimeter.(samples, Ref(e))
 ```
 
