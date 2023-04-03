@@ -1,6 +1,7 @@
 using EllipseSampling
 using Test
 using LinearAlgebra
+import Distributions
 
 function equality_of_2D_coordinates(vec1::Vector{<:Float64}, vec2::Vector{<:Float64})
     return ((abs(vec1[1]-vec2[1]) < 1e-14) + (abs(vec1[2]-vec2[2]) < 1e-14)) == 2
