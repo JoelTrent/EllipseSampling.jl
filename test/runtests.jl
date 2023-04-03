@@ -83,8 +83,9 @@ end
         ind1, ind2 = 2, 3
         confidence_level = 0.01
         Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5)
-        a_eig, b_eig = sqrt.(1.0 ./ eigvals(Hw))
-        eigvectors = eigvecs(Hw)
+        eigs = eigen(Hw)
+        a_eig, b_eig = sqrt.(1.0 ./ eigs.values)
+        eigvectors = eigs.vectors
 
         a, b, x_radius, y_radius, α  = EllipseSampling.calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
 
