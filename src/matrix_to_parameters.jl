@@ -32,5 +32,15 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     a = max(x_radius, y_radius)
     b = min(x_radius, y_radius)
 
+    # a, b and α could also be calculated by finding the sqrt of the reciprocal of the eigenvalues of the normalised inv(Γ)
+    # using LinearAlgebra
+    # sqrt.(1.0 ./ eigvals(inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5)))
+
+    # this method for finding α assumes that a is the x axis
+    # eigs = eigvecs(inv(Γ[[2,3], [2,3]]) .* 0.5 ./ (quantile(Chisq(2), 0.95)*0.5))
+    # atan(eigs[2,1], eigs[1,1]) # if a is x axis
+    # atan(eigs[2,1], eigs[1,1]) + pi/2 # if a is y axis
+
+
     return a, b, x_radius, y_radius, α 
 end

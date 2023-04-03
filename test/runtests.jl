@@ -1,5 +1,7 @@
 using EllipseSampling
 using Test
+using LinearAlgebra
+import Distributions
 
 function equality_of_2D_coordinates(vec1::Vector{<:Float64}, vec2::Vector{<:Float64})
     return ((abs(vec1[1]-vec2[1]) < 1e-14) + (abs(vec1[2]-vec2[2]) < 1e-14)) == 2
@@ -76,8 +78,24 @@ end
         @test equality_of_1D_coordinates(t_from_arclength_general(pi*1.0, a, b, x_radius, y_radius), pi*1.0)
     end
 
-    # @testset "CalculateEllipseParametersTest" begin
-    #     calculate_ellipse_parameters() # or use the generateN_equally_spaced_points(Γ) version
-    # end
+    @testset "CalculateEllipseParametersTest" begin
+        Γ = [7.7862e-6 -0.0506896 -0.0141446; -0.00506896 20.2146 6.61578; -0.0141446 6.61578 30.222]
+        ind1, ind2 = 2, 3
+        confidence_level = 0.01
+        Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5)
+        eigs = eigen(Hw)
+        a_eig, b_eig = sqrt.(1.0 ./ eigs.values)
+        eigvectors = eigs.vectors
 
+        a, b, x_radius, y_radius, α  = EllipseSampling.calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
+
+        @test equality_of_1D_coordinates(a_eig, a)
+        @test equality_of_1D_coordinates(b_eig, b)
+
+        if x_radius > y_radius
+            @test equality_of_1D_coordinates(atan(eigvectors[2,1], eigvectors[1,1]), α)
+        else
+            @test equality_of_1D_coordinates(atan(eigvectors[2,1], eigvectors[1,1]) + 0.5*pi, α)
+        end
+    end
 end
