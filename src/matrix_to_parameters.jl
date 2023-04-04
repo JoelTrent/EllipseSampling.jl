@@ -18,10 +18,10 @@ References and equation(s) to come.
 function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     confidence_level::Float64)
 
-    @assert (0.0 ≤ confidence_level && confidence_level ≤ 1.0) "The value of `confidence_level` is not between 0.0 and 1.0."
-    @assert size(Γ)[1] == size(Γ)[2] "`Γ` must be a square matrix."
-    @assert 0 < ind1 && ind1 ≤ size(Γ)[1] "`ind1` must be a valid row index in `Γ`." 
-    @assert 0 < ind2 && ind2 ≤ size(Γ)[1] "`ind2` must be a valid row index in `Γ`." 
+    (0.0 ≤ confidence_level && confidence_level ≤ 1.0) || throw(DomainError(confidence_level, "confidence_level must be between 0.0 and 1.0."))
+    size(Γ)[1] == size(Γ)[2] || throw(DimensionMismatch("Γ must be a square matrix."))
+    (0 < ind1 && ind1 ≤ size(Γ)[1]) || throw(BoundsError("ind1 must be a valid row index in Γ.")) 
+    (0 < ind2 && ind2 ≤ size(Γ)[1]) || throw(BoundsError("ind2 must be a valid row index in Γ."))
 
     Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5) # normalise Hw so that the RHS of the ellipse equation == 1
 

@@ -100,7 +100,7 @@ Other distributions defined on [0,1] can be used to generate points on the ellip
 """
 function generate_perimeter_point(norm_distance_on_perimeter::Float64, e::Ellipse)
 
-    @assert (0.0 ≤ norm_distance_on_perimeter && norm_distance_on_perimeter ≤ 1.0) "The value of `norm_distance_on_perimeter` is not between 0.0 and 1.0."
+    (0.0 ≤ norm_distance_on_perimeter && norm_distance_on_perimeter ≤ 1.0) || throw(DomainError("norm_distance_on_perimeter must be between 0.0 and 1.0."))
     
     point = zeros(2)
     angle = t_from_arclength_general(e.circumference*norm_distance_on_perimeter, e)
@@ -174,8 +174,8 @@ Equal spacing of points on the ellipse is with respect to arc length. The positi
 function generate_N_equally_spaced_points(num_points::Int, e::Ellipse; 
     start_point_shift::Float64=rand())
 
-    @assert (0.0 ≤ start_point_shift && start_point_shift ≤ 1.0) "The value of `start_point_shift` is not between 0.0 and 1.0."
-    @assert 0 < num_points "The number of points, `num_points`, to generate on the ellipse must be positive."
+    (0.0 ≤ start_point_shift && start_point_shift ≤ 1.0) || throw(DomainError("start_point_shift must be between 0.0 and 1.0."))
+    0 < num_points || throw(DomainError("the number of points, `num_points`, to generate on the ellipse must be positive"))
 
     points = zeros(2,num_points)
 

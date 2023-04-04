@@ -12,9 +12,9 @@ Asserts that the parameters relate to a valid ellipse. I.e. that `a ≥ b` and, 
 """
 function assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T) where T<:Float64
     
-    @assert (a ≥ b) "The radius of the major axis, `a`, must be greater than or equal to the radius of the minor axis, `b`. I.e. `a=max(x_radius, y_radius), b=min(x_radius, y_radius)`."
-    @assert (x_radius > 0) "The `x_radius` must be strictly positive `(>0)`."
-    @assert (y_radius > 0) "The `y_radius` must be strictly positive `(>0)`."
+    (a ≥ b) || throw(ArgumentError("the radius of the major axis, a, must be greater than or equal to the radius of the minor axis, b. I.e. a=max(x_radius, y_radius), b=min(x_radius, y_radius)."))
+    (x_radius > 0) || throw(("the x_radius must be strictly positive (>0)."))
+    (y_radius > 0) || throw(("the y_radius must be strictly positive (>0)."))
     return nothing
 end
 
