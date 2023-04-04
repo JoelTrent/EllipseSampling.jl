@@ -6,8 +6,8 @@ Pages = ["user_interface.md"]
 
 ```@docs
 construct_ellipse
-generateN_equally_spaced_points
-generate_point_on_perimeter
+generate_N_equally_spaced_points
+generate_perimeter_point
 x_parametric_equation 
 y_parametric_equation
 t_from_arclength
