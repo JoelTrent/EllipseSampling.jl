@@ -4,6 +4,7 @@ import Roots, Elliptic, Distributions
 
 export construct_ellipse,
     generate_N_equally_spaced_points, generate_perimeter_point,
+    generate_N_clustered_points,
     x_parametric_equation, y_parametric_equation, 
     t_from_arclength, t_from_arclength_general
 

@@ -130,8 +130,7 @@ function generate_perimeter_point(norm_distance_on_perimeter::T, x_radius::T, y_
 end
 
 """
-    generate_perimeter_point(norm_distance_on_perimeter::Float64, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
-        confidence_level::Float64=0.01)
+    generate_perimeter_point(norm_distance_on_perimeter::Float64, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; confidence_level::Float64=0.01)
 
 An alternative way to call [`generate_perimeter_point(norm_distance_on_perimeter::Float64, e::Ellipse)`](@ref), by supplying a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest and the confidence level that represent a 2D ellipse approximation of the log-likelihood function.
 
@@ -145,8 +144,7 @@ An alternative way to call [`generate_perimeter_point(norm_distance_on_perimeter
 # Keyword Arguments
 - `confidence_level`: The confidence level ∈[0.0,1.0] at which the ellipse approximation is constructed. Default is `0.01`.
 """
-function generate_perimeter_point(norm_distance_on_perimeter::Float64, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
-    confidence_level::Float64=0.01)
+function generate_perimeter_point(norm_distance_on_perimeter::Float64, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; confidence_level::Float64=0.01)
 
     _, _, x_radius, y_radius, α = calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
     return generate_perimeter_point(norm_distance_on_perimeter, x_radius, y_radius, α, θmle[ind1], θmle[ind2])
@@ -175,7 +173,7 @@ function generate_N_equally_spaced_points(num_points::Int, e::Ellipse;
     start_point_shift::Float64=rand())
 
     (0.0 ≤ start_point_shift && start_point_shift ≤ 1.0) || throw(DomainError("start_point_shift must be between 0.0 and 1.0."))
-    0 < num_points || throw(DomainError("the number of points, `num_points`, to generate on the ellipse must be positive"))
+    0 < num_points || throw(DomainError("the number of points, num_points, to generate on the ellipse must be positive"))
 
     points = zeros(2,num_points)
 
@@ -193,8 +191,7 @@ function generate_N_equally_spaced_points(num_points::Int, e::Ellipse;
 end
 
 """
-    generate_N_equally_spaced_points(num_points::Int, x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0; 
-        start_point_shift::Float64=rand()) where T<:Float64
+    generate_N_equally_spaced_points(num_points::Int, x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0; start_point_shift::Float64=rand()) where T<:Float64
 
 An alternative way to call [`generate_N_equally_spaced_points(num_points::Int, e::Ellipse; start_point_shift::Float64=rand())`](@ref), by supplying the parameters of the ellipse to generate points on.
 
@@ -239,4 +236,63 @@ function generate_N_equally_spaced_points(num_points::Int, Γ::Matrix{Float64}, 
     _, _, x_radius, y_radius, α = calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
     return generate_N_equally_spaced_points(num_points, x_radius, y_radius, α, θmle[ind1], θmle[ind2],
                                     start_point_shift=start_point_shift)
+end
+
+"""
+generate_N_clustered_points(num_points::Int, 
+                            e::Ellipse; 
+                            start_point_shift::Float64=rand(),
+                            sqrt_distortion::Float64=0.0)
+
+"""
+function generate_N_clustered_points(num_points::Int, 
+                                    e::Ellipse; 
+                                    start_point_shift::Float64=rand(),
+                                    sqrt_distortion::Float64=0.0)
+
+    0 < num_points || throw(DomainError("the number of points, num_points, to generate on the ellipse must be positive"))
+    (0.0 <= sqrt_distortion && sqrt_distortion <= 1.0) || throw(DomainError("sqrt_distortion must be in the closed interval [0.0, 1.0]"))
+
+    points = zeros(2, num_points)
+
+    if sqrt_distortion == 1.0 # original ellipse
+        return generate_N_equally_spaced_points(num_points, e,
+                                                start_point_shift=start_point_shift)
+
+    elseif sqrt_distortion == 0.0 # circle
+        shift = start_point_shift/num_points
+        angles = collect(LinRange(shift, (1+shift)*2*pi, num_points+1)[1:(end-1)])
+    else
+        d_a = (e.b + sqrt_distortion^2*(e.a-e.b))
+        d_e = construct_ellipse(d_a, e.b)
+
+        shift = start_point_shift/num_points
+
+        lengths = collect(LinRange((shift)*d_e.circumference, (1+shift)*d_e.circumference, num_points+1))[1:(end-1)]
+        angles = t_from_arclength_general.(lengths, Ref(d_e))
+    end
+
+    if e.x_radius < e.y_radius
+        angles .= angles .+ 0.5*pi
+    end
+    for i in 1:num_points
+        points[:,i] .= x_parametric_equation(angles[i], e), 
+                y_parametric_equation(angles[i], e)
+    end
+
+    return points
+end
+
+function generate_N_clustered_points(num_points::Int, x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0; start_point_shift::Float64=rand(), sqrt_distortion::Float64=0.0) where T<:Float64
+
+    e = construct_ellipse(x_radius, y_radius, α, Cx, Cy)
+    return generate_N_clustered_points(num_points, e, start_point_shift=start_point_shift,
+                                        sqrt_distortion=sqrt_distortion)
+end
+
+function generate_N_clustered_points(num_points::Int, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; confidence_level::Float64=0.01, start_point_shift::Float64=rand(), sqrt_distortion::Float64=0.0)
+
+    _, _, x_radius, y_radius, α = calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
+    return generate_N_clustered_points(num_points, x_radius, y_radius, α, θmle[ind1], θmle[ind2],
+                                    start_point_shift=start_point_shift, sqrt_distortion=sqrt_distortion)
 end
