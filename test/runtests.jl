@@ -38,6 +38,46 @@ end
         end
     end
     
+    @testset "NClusteredPointsTest" begin
+        e = construct_ellipse(2.0, 1.0)
+        correct_output = [2.0 -2.0; 0.0 0.0]
+        num_points=2
+        output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.0)
+        for i in 1:num_points
+            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+        end
+
+        output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.5)
+        for i in 1:num_points
+            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+        end
+
+        output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=1.0)
+        for i in 1:num_points
+            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+        end
+
+        e = construct_ellipse(1.0, 1.0)
+        correct_output = [1.0 -0.5 -0.5; 0.0 sqrt(3.0)/2.0 -sqrt(3.0)/2.0]
+        num_points=3
+        output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.1)
+        for i in 1:num_points
+            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+        end
+
+        correct_output = [1.0 0.0 -1.0 0.0; 0.0 1.0 0.0 -1.0]
+        num_points=4
+        output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.0)
+        for i in 1:num_points
+            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+        end
+
+        output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.1)
+        for i in 1:num_points
+            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+        end
+    end
+
     # Generate point on perimeter tests
     @testset "PointOnPerimeterTest" begin
         e = construct_ellipse(1.0, 1.0)
