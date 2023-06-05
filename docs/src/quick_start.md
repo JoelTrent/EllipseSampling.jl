@@ -83,7 +83,7 @@ end
 
 ## Custom Sampling Method
 
-If we want to use a custom sampling method different to equal spacing and clustered methods then we can use [`generate_perimeter_point`](@ref) with any arbitrary distribution defined on \[0,1\]. For example, if we want to take quick_start00 uniform random samples (uniform with respect to arc length) of our ellipse perimeter we would use:
+If we want to use a custom sampling method that is different to the equal spacing and clustered methods then we can use [`generate_perimeter_point`](@ref) coupled with any arbitrary distribution defined on \[0,1\]. For example, if we want to take 100 uniform random samples (uniform with respect to arc length) of our ellipse perimeter we would use:
 
 ```julia
 e=construct_ellipse(1.0, 0.5, 0.0, 2.0, 1.0)
