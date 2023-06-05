@@ -40,6 +40,7 @@ Contains the information required to define an ellipse which may have been rotat
 - `a`: the major radius of the ellipse.
 - `b`: the minor radius of the ellipse.
 - `m`: the eccentricity of the ellipse squared. See [`EllipseSampling.eccentricity_squared`](@ref).
+- `em`: complete elliptic integral of the second kind evaluated for the eccentricity squared of the ellipse: `Elliptic.E(m)`. See: [Elliptic.jl](https://github.com/nolta/Elliptic.jl).
 - `circumference`: the circumference of the ellipse.
 """
 struct Ellipse
@@ -51,6 +52,7 @@ struct Ellipse
     a::Float64
     b::Float64
     m::Float64
+    em::Float64
     circumference::Float64
 end
 
@@ -91,7 +93,8 @@ function construct_ellipse(x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T
     assert_parameters_are_valid(a, b, x_radius, y_radius)
 
     m = eccentricity_squared(a, b)
+    em = Elliptic.E(m)
     C = circumference(a, b)
 
-    return Ellipse(x_radius, y_radius, α, Cx, Cy, a, b, m, C)
+    return Ellipse(x_radius, y_radius, α, Cx, Cy, a, b, m, em, C)
 end

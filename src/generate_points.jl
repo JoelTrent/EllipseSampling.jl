@@ -28,8 +28,7 @@ Julia version of the python function `t_from_length` by [John D. Cook](https://w
 - `e`: a valid [`EllipseSampling.Ellipse`](@ref) struct which defines an ellipse.
 """
 function t_from_arclength(arc_len::Float64, e::Ellipse)
-    em = Elliptic.E(e.m)
-    t = 0.5*pi - E_inverse(em, em - arc_len/e.a, e.m)
+    t = 0.5*pi - E_inverse(e.em, e.em - arc_len/e.a, e.m)
     return t
 end
 
