@@ -1,5 +1,6 @@
 ```@setup quick_start
 using EllipseSampling
+using Pkg; Pkg.add("Plots")
 using Plots; gr()
 Plots.reset_defaults()
 default(palette=:seaborn_colorblind6, msw=0, markeralpha=0.7, aspect_ratio=:equal, label=nothing)

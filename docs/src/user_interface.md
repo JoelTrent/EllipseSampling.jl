@@ -8,7 +8,7 @@ Pages = ["user_interface.md"]
 
 For ease of use, all ellipse sampling \[generation\] functions can either be called directly with ellipse parameters such as a, b and α, or we can construct an [`EllipseSampling.Ellipse`](@ref) struct first with those parameters, and use this struct when calling the generation functions.
 
-We construct an [`EllipseSampling.Ellipse`](Ref) struct using [`construct_ellipse`](@ref).
+We construct an [`EllipseSampling.Ellipse`](@ref) struct using [`construct_ellipse`](@ref).
 
 ```@docs
 construct_ellipse
