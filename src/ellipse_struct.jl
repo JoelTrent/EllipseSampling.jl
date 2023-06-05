@@ -12,9 +12,9 @@ Asserts that the parameters relate to a valid ellipse. I.e. that `a ≥ b` and, 
 """
 function assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T) where T<:Float64
     
-    @assert (a ≥ b) "The radius of the major axis, `a`, must be greater than or equal to the radius of the minor axis, `b`. I.e. `a=max(x_radius, y_radius), b=min(x_radius, y_radius)`."
-    @assert (x_radius > 0) "The `x_radius` must be strictly positive `(>0)`."
-    @assert (y_radius > 0) "The `y_radius` must be strictly positive `(>0)`."
+    (a ≥ b) || throw(ArgumentError("the radius of the major axis, a, must be greater than or equal to the radius of the minor axis, b. I.e. a=max(x_radius, y_radius), b=min(x_radius, y_radius)."))
+    (x_radius > 0) || throw(("the x_radius must be strictly positive (>0)."))
+    (y_radius > 0) || throw(("the y_radius must be strictly positive (>0)."))
     return nothing
 end
 
@@ -29,7 +29,7 @@ end
         m::Float64,
         circumference::Float64)
 
-Contains the information required to define an ellipse which may have been rotated and translated. See [`construct_ellipse`](@ref)
+Contains the information required to define an ellipse which may have been rotated and translated. See [`construct_ellipse`](@ref).
 
 # Arguments
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
@@ -39,7 +39,7 @@ Contains the information required to define an ellipse which may have been rotat
 - `Cy`: the y coordinate of the centre of the ellipse (the translation of the ellipse in the y axis). 
 - `a`: the major radius of the ellipse.
 - `b`: the minor radius of the ellipse.
-- `m`: the eccentricity of the ellipse squared. See [`eccentricity_squared`](@ref)
+- `m`: the eccentricity of the ellipse squared. See [`EllipseSampling.eccentricity_squared`](@ref).
 - `circumference`: the circumference of the ellipse.
 """
 struct Ellipse
@@ -57,7 +57,7 @@ end
 """
     construct_ellipse(x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0) where T<:Float64
 
-Constructs a [`Ellipse`](@ref) `struct` which contains the information required to define an ellipse which may have been rotated and translated.
+Constructs a [`EllipseSampling.Ellipse`](@ref) `struct` which contains the information required to define an ellipse which may have been rotated and translated.
 
 # Arguments
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).

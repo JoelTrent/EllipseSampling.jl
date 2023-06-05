@@ -1,7 +1,7 @@
 name = "EllipseSampling"
 uuid = "7d220c50-6298-48cd-9710-1d1a8ef13806"
 authors = ["JoelTrent <79883375+JoelTrent@users.noreply.github.com> and contributors"]
-version = "1.1.0-DEV"
+version = "1.1.2-DEV"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
@@ -12,6 +12,9 @@ SnoopPrecompile = "66db9d55-30c0-4569-8b51-7e840670fc0c"
 
 [compat]
 Elliptic = "1"
+Distributions = "0.25"
+SnoopPrecompile = "1"
+Roots = "2"
 julia = "1.1"
 
 [extras]
