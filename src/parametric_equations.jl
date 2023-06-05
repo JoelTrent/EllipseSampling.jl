@@ -21,7 +21,7 @@ Implements the parametric equation for variable x of a translated and rotated el
     
 # Arguments
 - `t`: an angle between 0 and 2π radians that defines the x location on the ellipse.
-- `e`: A valid [`Ellipse`](@ref) struct which defines an ellipse.
+- `e`: a valid [`Ellipse`](@ref) struct which defines an ellipse.
 """
 function x_parametric_equation(t::T, e::Ellipse) where T<:Float64
     return e.x_radius*(cos(t)*cos(e.α)) - e.y_radius*(sin(t)*sin(e.α)) + e.Cx
@@ -50,7 +50,7 @@ Implements the parametric equation for variable y of a translated and rotated el
     
 # Arguments
 - `t`: an angle between 0 and 2π radians that defines the y location on the ellipse.
-- `e`: A valid [`Ellipse`](@ref) struct which defines an ellipse.
+- `e`: a valid [`Ellipse`](@ref) struct which defines an ellipse.
 """
 function y_parametric_equation(t::T, e::Ellipse) where T<:Float64
     return e.x_radius*(cos(t)*sin(e.α)) + e.y_radius*(sin(t)*cos(e.α)) + e.Cy

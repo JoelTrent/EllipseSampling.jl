@@ -28,7 +28,7 @@ end
 """
     circumference(a::Float64, b::Float64)
 
-Calculates the circumference of an ellipse using the elliptic integral of the second kind. Uses `Elliptic.jl`.
+Calculates the circumference of an ellipse using the elliptic integral of the second kind. Uses [Elliptic.jl](https://github.com/nolta/Elliptic.jl).
 
 # Arguments
 - `a`: the major radius of the ellipse.

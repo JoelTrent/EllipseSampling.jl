@@ -3,12 +3,12 @@ using Test
 using LinearAlgebra
 import Distributions
 
-function equality_of_2D_coordinates(vec1::Vector{<:Float64}, vec2::Vector{<:Float64})
-    return ((abs(vec1[1]-vec2[1]) < 1e-14) + (abs(vec1[2]-vec2[2]) < 1e-14)) == 2
+function isapprox_ellipsesampling(vec1::Vector{<:Float64}, vec2::Vector{<:Float64})
+    return isapprox(vec1, vec2, atol=1e-14)
 end
 
-function equality_of_1D_coordinates(x1::Float64, x2::Float64)
-    return abs(x1-x2) < 1e-14
+function isapprox_ellipsesampling(x1::Float64, x2::Float64)
+    return isapprox(x1, x2, atol=1e-14)
 end
 
 @testset "EllipseSampling.jl" begin
@@ -19,7 +19,7 @@ end
         num_points=2
         output = generate_N_equally_spaced_points(num_points, e, start_point_shift=0.0)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         e = construct_ellipse(1.0, 1.0)
@@ -27,14 +27,14 @@ end
         num_points=3
         output = generate_N_equally_spaced_points(num_points, e, start_point_shift=0.0)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         correct_output = [1.0 0.0 -1.0 0.0; 0.0 1.0 0.0 -1.0]
         num_points=4
         output = generate_N_equally_spaced_points(num_points, e, start_point_shift=0.0)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
     end
     
@@ -44,17 +44,17 @@ end
         num_points=2
         output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.0)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.5)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=1.0)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         e = construct_ellipse(1.0, 1.0)
@@ -62,60 +62,60 @@ end
         num_points=3
         output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.1)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         correct_output = [1.0 0.0 -1.0 0.0; 0.0 1.0 0.0 -1.0]
         num_points=4
         output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.0)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
 
         output = generate_N_clustered_points(num_points, e, start_point_shift=0.0, sqrt_distortion=0.1)
         for i in 1:num_points
-            @test equality_of_2D_coordinates(correct_output[:, i], output[:, i]) 
+            @test isapprox_ellipsesampling(correct_output[:, i], output[:, i]) 
         end
     end
 
     # Generate point on perimeter tests
     @testset "PointOnPerimeterTest" begin
         e = construct_ellipse(1.0, 1.0)
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.0, e), [1.0, 0.0])
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.25, e), [0.0, 1.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.0, e), [1.0, 0.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.25, e), [0.0, 1.0])
 
         e = construct_ellipse(2.0, 1.0)
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.0, e), [2.0, 0.0])
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.25, e), [0.0, 1.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.0, e), [2.0, 0.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.25, e), [0.0, 1.0])
 
         e = construct_ellipse(1.0, 2.0)
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.0, e), [0.0, 2.0])
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.25, e), [-1.0, 0.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.0, e), [0.0, 2.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.25, e), [-1.0, 0.0])
 
         e = construct_ellipse(1.0, 1.0, pi/2)
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.0, e), [0.0, 1.0])
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.25, e), [-1.0, 0.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.0, e), [0.0, 1.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.25, e), [-1.0, 0.0])
 
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.0, 1.0, 1.0, pi/2), [0.0, 1.0])
-        @test equality_of_2D_coordinates(generate_perimeter_point(0.25, 1.0, 1.0, pi/2), [-1.0, 0.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.0, 1.0, 1.0, pi/2), [0.0, 1.0])
+        @test isapprox_ellipsesampling(generate_perimeter_point(0.25, 1.0, 1.0, pi/2), [-1.0, 0.0])
     end
 
     @testset "ParametricEquationsTest" begin
         x_radius=1.0; y_radius=1.0; α=0.0; Cx=1.0
-        @test equality_of_1D_coordinates(x_parametric_equation(0.0, x_radius, y_radius, α, Cx), 2.0)
-        @test equality_of_1D_coordinates(x_parametric_equation(pi/2.0, x_radius, y_radius, α, Cx), 1.0)
-        @test equality_of_1D_coordinates(x_parametric_equation(pi*1.0, x_radius, y_radius, α, Cx), 0.0)
+        @test isapprox_ellipsesampling(x_parametric_equation(0.0, x_radius, y_radius, α, Cx), 2.0)
+        @test isapprox_ellipsesampling(x_parametric_equation(pi/2.0, x_radius, y_radius, α, Cx), 1.0)
+        @test isapprox_ellipsesampling(x_parametric_equation(pi*1.0, x_radius, y_radius, α, Cx), 0.0)
 
         Cy=1.0
-        @test equality_of_1D_coordinates(y_parametric_equation(0.0, x_radius, y_radius, α, Cy), 1.0)
-        @test equality_of_1D_coordinates(y_parametric_equation(pi/2.0, x_radius, y_radius, α, Cy), 2.0)
-        @test equality_of_1D_coordinates(y_parametric_equation(pi*1.0, x_radius, y_radius, α, Cy), 1.0)
+        @test isapprox_ellipsesampling(y_parametric_equation(0.0, x_radius, y_radius, α, Cy), 1.0)
+        @test isapprox_ellipsesampling(y_parametric_equation(pi/2.0, x_radius, y_radius, α, Cy), 2.0)
+        @test isapprox_ellipsesampling(y_parametric_equation(pi*1.0, x_radius, y_radius, α, Cy), 1.0)
     end
 
     @testset "TFromArcLengthTest" begin
         a=1.0; b=1.0; x_radius=1.0; y_radius=1.0
-        @test equality_of_1D_coordinates(t_from_arclength_general(pi/2.0, a, b, x_radius, y_radius), pi/2.0)
-        @test equality_of_1D_coordinates(t_from_arclength_general(pi*1.0, a, b, x_radius, y_radius), pi*1.0)
+        @test isapprox_ellipsesampling(t_from_arclength_general(pi/2.0, a, b, x_radius, y_radius), pi/2.0)
+        @test isapprox_ellipsesampling(t_from_arclength_general(pi*1.0, a, b, x_radius, y_radius), pi*1.0)
     end
 
     @testset "CalculateEllipseParametersTest" begin
@@ -129,13 +129,13 @@ end
 
         a, b, x_radius, y_radius, α  = EllipseSampling.calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level)
 
-        @test equality_of_1D_coordinates(a_eig, a)
-        @test equality_of_1D_coordinates(b_eig, b)
+        @test isapprox_ellipsesampling(a_eig, a)
+        @test isapprox_ellipsesampling(b_eig, b)
 
         if x_radius > y_radius
-            @test equality_of_1D_coordinates(atan(eigvectors[2,1], eigvectors[1,1]), α)
+            @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]), α)
         else
-            @test equality_of_1D_coordinates(atan(eigvectors[2,1], eigvectors[1,1]) + 0.5*pi, α)
+            @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]) + 0.5*pi, α)
         end
     end
 end
