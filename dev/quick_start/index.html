@@ -3,34 +3,39 @@
 
 e=construct_ellipse(1.0, 0.5, 0.0, 2.0, 1.0)
 points=generate_N_equally_spaced_points(9, e; start_point_shift=0.0) 
-scatter(points[1,:], points[2,:])</code></pre><p>Or alternatively:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
+scatter(points[1,:], points[2,:])
+savefig(&quot;equalspacing1.svg&quot;); nothing # hide</code></pre><p><img src="equalspacing1.svg" alt/></p><p>Or alternatively:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
 
 points=generate_N_equally_spaced_points(9, 1.0, 0.5, 0.0, 2.0, 1.0; start_point_shift=0.0) 
-scatter(points[1,:], points[2,:])</code></pre><h3 id="Rotated-Ellipses"><a class="docs-heading-anchor" href="#Rotated-Ellipses">Rotated Ellipses</a><a id="Rotated-Ellipses-1"></a><a class="docs-heading-anchor-permalink" href="#Rotated-Ellipses" title="Permalink"></a></h3><p>If our ellipse has an anticlockwise rotation of <span>$\\frac{1}{3}\\pi$</span> radians or 60 degrees then we modify that argument to <a href="../user_interface/#EllipseSampling.construct_ellipse"><code>construct_ellipse</code></a>.</p><pre><code class="language-example hljs">using EllipseSampling, Plots
+scatter(points[1,:], points[2,:])
+savefig(&quot;equalspacing2.svg&quot;); nothing # hide</code></pre><p><img src="equalspacing2.svg" alt/></p><h3 id="Rotated-Ellipses"><a class="docs-heading-anchor" href="#Rotated-Ellipses">Rotated Ellipses</a><a id="Rotated-Ellipses-1"></a><a class="docs-heading-anchor-permalink" href="#Rotated-Ellipses" title="Permalink"></a></h3><p>If instead our ellipse has an anticlockwise rotation of <span>$\\frac{\\pi}{3}$</span> radians or 60 degrees then we modify that argument to <a href="../user_interface/#EllipseSampling.construct_ellipse"><code>construct_ellipse</code></a>.</p><pre><code class="language-example hljs">using EllipseSampling, Plots
 
 e=construct_ellipse(1.0, 0.5, pi/3.0, 2.0, 1.0)
 points=generate_N_equally_spaced_points(9, e; start_point_shift=0.0) 
-scatter(points[1,:], points[2,:])</code></pre><h2 id="Clustered-Points"><a class="docs-heading-anchor" href="#Clustered-Points">Clustered Points</a><a id="Clustered-Points-1"></a><a class="docs-heading-anchor-permalink" href="#Clustered-Points" title="Permalink"></a></h2><p>To more easily see the clustering effect we will increase the number of points generated and decrease the y radius. Note, the closer in magnitude the major and minor axis radii are, the weaker the clustering effect.  To generate 30 clustered points on an ellipse, with x radius of 1.0 and y radius of 0.1, no rotation and a centre of <span>$x,y = [2,1]$</span> we use:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
+scatter(points[1,:], points[2,:])
+savefig(&quot;equalspacing3.svg&quot;); nothing # hide</code></pre><p><img src="equalspacing3.svg" alt/></p><h2 id="Clustered-Points"><a class="docs-heading-anchor" href="#Clustered-Points">Clustered Points</a><a id="Clustered-Points-1"></a><a class="docs-heading-anchor-permalink" href="#Clustered-Points" title="Permalink"></a></h2><p>To more easily see the clustering effect we will increase the number of points generated and decrease the y radius. Note, the closer in magnitude the major and minor axis radii are, the weaker the clustering effect.  To generate 30 clustered points on an ellipse, with x radius of 1.0 and y radius of 0.1, no rotation and a centre of <span>$x,y = [2,1]$</span> we use:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
 
 e=construct_ellipse(1.0, 0.1, 0.0, 2.0, 1.0)
 points=generate_N_clustered_points(30, e; start_point_shift=0.0, sqrt_distortion=0.0) 
-scatter(points[1,:], points[2,:])</code></pre><p>The clustering effect becomes weaker when we increase the parameter <code>sqrt_distortion</code> towards 1.0:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
+scatter(points[1,:], points[2,:])
+savefig(&quot;clustering1.svg&quot;); nothing # hide</code></pre><p><img src="clustering1.svg" alt/></p><p>The clustering effect becomes weaker when we increase the parameter <code>sqrt_distortion</code> towards 1.0:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
 
 plot()
 e=construct_ellipse(1.0, 0.1, 0.0, 2.0, 1.0)
 for sqrt_distortion in 0.0:0.2:1.0
     points=generate_N_clustered_points(10, e; start_point_shift=0.0, sqrt_distortion=sqrt_distortion) 
     scatter!(points[1,:], points[2,:], label=string(&quot;sqrt_distortion=&quot;,sqrt_distortion))
-end</code></pre><p>The clustering effect is completely gone if our ellipse is a circle:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
+end
+savefig(&quot;clustering2.svg&quot;); nothing # hide</code></pre><p><img src="clustering2.svg" alt/></p><p>The clustering effect is completely gone if our ellipse is a circle:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
 
-plt=plot()
+plot()
 e=construct_ellipse(1.0, 1.0, 0.0, 2.0, 1.0)
 for sqrt_distortion in 0.0:0.5:1.0
     points=generate_N_clustered_points(10, e; start_point_shift=0.0, sqrt_distortion=sqrt_distortion) 
-    scatter!(plt, points[1,:], points[2,:], label=string(&quot;sqrt_distortion=&quot;,sqrt_distortion),
+    scatter!(points[1,:], points[2,:], label=string(&quot;sqrt_distortion=&quot;,sqrt_distortion),
             markersize=7-sqrt_distortion*3, markeralpha=0.5)
 end
-plt</code></pre><h2 id="Custom-Sampling-Method"><a class="docs-heading-anchor" href="#Custom-Sampling-Method">Custom Sampling Method</a><a id="Custom-Sampling-Method-1"></a><a class="docs-heading-anchor-permalink" href="#Custom-Sampling-Method" title="Permalink"></a></h2><p>If we want to use a custom sampling method different to equal spacing and clustered methods then we can use <a href="../user_interface/#EllipseSampling.generate_perimeter_point"><code>generate_perimeter_point</code></a> with any arbitrary distribution defined on [0,1]. For example, if we want to take 100 uniform random samples (uniform with respect to arc length) of our ellipse perimeter we would use:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
+savefig(&quot;clustering3.svg&quot;); nothing # hide</code></pre><p><img src="clustering3.svg" alt/></p><h2 id="Custom-Sampling-Method"><a class="docs-heading-anchor" href="#Custom-Sampling-Method">Custom Sampling Method</a><a id="Custom-Sampling-Method-1"></a><a class="docs-heading-anchor-permalink" href="#Custom-Sampling-Method" title="Permalink"></a></h2><p>If we want to use a custom sampling method different to equal spacing and clustered methods then we can use <a href="../user_interface/#EllipseSampling.generate_perimeter_point"><code>generate_perimeter_point</code></a> with any arbitrary distribution defined on [0,1]. For example, if we want to take 100 uniform random samples (uniform with respect to arc length) of our ellipse perimeter we would use:</p><pre><code class="language-example hljs">using EllipseSampling, Plots
 e=construct_ellipse(1.0, 0.5, 0.0, 2.0, 1.0)
 N = 100
 samples = rand(N)
@@ -39,4 +44,5 @@ samples = rand(N)
 points = generate_perimeter_point.(samples, Ref(e)) 
 points = reduce(hcat, points)
 
-scatter(points[1,:], points[2,:])</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../user_interface/">User Interface »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Monday 5 June 2023 05:20">Monday 5 June 2023</span>. Using Julia version 1.9.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+scatter(points[1,:], points[2,:])
+savefig(&quot;customsampling.svg&quot;); nothing # hide</code></pre><p><img src="customsampling.svg" alt/></p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../">« Home</a><a class="docs-footer-nextpage" href="../user_interface/">User Interface »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 0.27.24 on <span class="colophon-date" title="Monday 5 June 2023 05:47">Monday 5 June 2023</span>. Using Julia version 1.9.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
