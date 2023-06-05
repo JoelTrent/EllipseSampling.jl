@@ -17,7 +17,10 @@ using EllipseSampling, Plots
 e=construct_ellipse(1.0, 0.5, 0.0, 2.0, 1.0)
 points=generate_N_equally_spaced_points(9, e; start_point_shift=0.0) 
 scatter(points[1,:], points[2,:])
+savefig("equalspacing1.svg"); nothing # hide
 ```
+
+![](equalspacing1.svg)
 
 Or alternatively:
 ```example quick_start
@@ -25,11 +28,14 @@ using EllipseSampling, Plots
 
 points=generate_N_equally_spaced_points(9, 1.0, 0.5, 0.0, 2.0, 1.0; start_point_shift=0.0) 
 scatter(points[1,:], points[2,:])
+savefig("equalspacing2.svg"); nothing # hide
 ```
+
+![](equalspacing2.svg)
 
 ### Rotated Ellipses
 
-If our ellipse has an anticlockwise rotation of ``\\frac{1}{3}\\pi`` radians or 60 degrees then we modify that argument to [`construct_ellipse`](@ref).
+If instead our ellipse has an anticlockwise rotation of ``\\frac{\\pi}{3}`` radians or 60 degrees then we modify that argument to [`construct_ellipse`](@ref).
 
 ```example quick_start
 using EllipseSampling, Plots
@@ -37,7 +43,11 @@ using EllipseSampling, Plots
 e=construct_ellipse(1.0, 0.5, pi/3.0, 2.0, 1.0)
 points=generate_N_equally_spaced_points(9, e; start_point_shift=0.0) 
 scatter(points[1,:], points[2,:])
+savefig("equalspacing3.svg"); nothing # hide
 ```
+
+
+![](equalspacing3.svg)
 
 ## Clustered Points
 
@@ -50,7 +60,10 @@ using EllipseSampling, Plots
 e=construct_ellipse(1.0, 0.1, 0.0, 2.0, 1.0)
 points=generate_N_clustered_points(30, e; start_point_shift=0.0, sqrt_distortion=0.0) 
 scatter(points[1,:], points[2,:])
+savefig("clustering1.svg"); nothing # hide
 ```
+
+![](clustering1.svg)
 
 The clustering effect becomes weaker when we increase the parameter `sqrt_distortion` towards 1.0:
 
@@ -63,22 +76,26 @@ for sqrt_distortion in 0.0:0.2:1.0
     points=generate_N_clustered_points(10, e; start_point_shift=0.0, sqrt_distortion=sqrt_distortion) 
     scatter!(points[1,:], points[2,:], label=string("sqrt_distortion=",sqrt_distortion))
 end
+savefig("clustering2.svg"); nothing # hide
 ```
+
+![](clustering2.svg)
 
 The clustering effect is completely gone if our ellipse is a circle:
 
 ```example quick_start
 using EllipseSampling, Plots
 
-plt=plot()
+plot()
 e=construct_ellipse(1.0, 1.0, 0.0, 2.0, 1.0)
 for sqrt_distortion in 0.0:0.5:1.0
     points=generate_N_clustered_points(10, e; start_point_shift=0.0, sqrt_distortion=sqrt_distortion) 
-    scatter!(plt, points[1,:], points[2,:], label=string("sqrt_distortion=",sqrt_distortion),
+    scatter!(points[1,:], points[2,:], label=string("sqrt_distortion=",sqrt_distortion),
             markersize=7-sqrt_distortion*3, markeralpha=0.5)
 end
-plt
+savefig("clustering3.svg"); nothing # hide
 ```
+![](clustering3.svg)
 
 ## Custom Sampling Method
 
@@ -95,5 +112,7 @@ points = generate_perimeter_point.(samples, Ref(e))
 points = reduce(hcat, points)
 
 scatter(points[1,:], points[2,:])
+savefig("customsampling.svg"); nothing # hide
 ```
 
+![](customsampling.svg)
