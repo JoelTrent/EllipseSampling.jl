@@ -1,3 +1,16 @@
+"""
+    ellipse_zero(t::Float64, p::AbstractVector)
+
+Used by [`EllipseSampling.E_inverse`](@ref) to find the location `t` where the function is zero. Equivalent to the anonymous function `f(y) = Elliptic.E(y, m) - z`.
+
+# Arguments
+- `t`: the argument optimised over.
+- `p`: a 2 element static array containing the values for `z` and `m`.
+"""
+function ellipse_zero(t::Float64, p::AbstractVector)
+    return @inbounds Elliptic.E(t, p[2]) - p[1]
+end
+
 # Julia version of functions from https://www.johndcook.com/blog/2022/11/02/ellipse-rng/
 """
     E_inverse(em::T, z::T, m::T) where T<:Float64
@@ -11,8 +24,9 @@ Julia version of the python function `t_from_length` by [John D. Cook](https://w
 """
 function E_inverse(em::T, z::T, m::T) where T<:Float64
     t = (z/em)*(pi/2)
-    f(y) = Elliptic.E(y, m) - z
-    r = Roots.find_zero(f, t, Roots.Order0())
+    # f(y) = Elliptic.E(y, m) - z
+    # r = Roots.find_zero(f, t, Roots.Order0())
+    r = Roots.find_zero(ellipse_zero, t, Roots.Order0(), p=SA[z,m])
     return r
 end
 
