@@ -29,7 +29,7 @@ end
         m::Float64,
         circumference::Float64)
 
-Contains the information required to define an ellipse which may have been rotated and translated. See [`construct_ellipse`](@ref)
+Contains the information required to define an ellipse which may have been rotated and translated. See [`construct_ellipse`](@ref).
 
 # Arguments
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
@@ -39,7 +39,7 @@ Contains the information required to define an ellipse which may have been rotat
 - `Cy`: the y coordinate of the centre of the ellipse (the translation of the ellipse in the y axis). 
 - `a`: the major radius of the ellipse.
 - `b`: the minor radius of the ellipse.
-- `m`: the eccentricity of the ellipse squared. See [`eccentricity_squared`](@ref)
+- `m`: the eccentricity of the ellipse squared. See [`EllipseSampling.eccentricity_squared`](@ref).
 - `circumference`: the circumference of the ellipse.
 """
 struct Ellipse
@@ -57,7 +57,7 @@ end
 """
     construct_ellipse(x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0) where T<:Float64
 
-Constructs a [`Ellipse`](@ref) `struct` which contains the information required to define an ellipse which may have been rotated and translated.
+Constructs a [`EllipseSampling.Ellipse`](@ref) `struct` which contains the information required to define an ellipse which may have been rotated and translated.
 
 # Arguments
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
