@@ -19,19 +19,11 @@ function assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T) where
 end
 
 """
-    Ellipse(x_radius::Float64,
-        y_radius::Float64,
-        α::Float64,
-        Cx::Float64,
-        Cy::Float64,
-        a::Float64,
-        b::Float64,
-        m::Float64,
-        circumference::Float64)
+    Ellipse
 
 Contains the information required to define an ellipse which may have been rotated and translated. See [`construct_ellipse`](@ref).
 
-# Arguments
+# Fields
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
 - `y_radius`: radius of the ellipse in the y axis (i.e. when the rotation, `α`, is zero).
 - `α`: an angle in radians (0 to 2π) that the ellipse has been rotated by. A positive value represents an anti-clockwise rotation.
