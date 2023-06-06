@@ -4,11 +4,11 @@
 Used by [`EllipseSampling.E_inverse`](@ref) to find the location `t` where the function is zero. Equivalent to the anonymous function `f(y) = Elliptic.E(y, m) - z`.
 
 # Arguments
-- `t`: the argument optimised over.
+- `x`: the argument optimised over.
 - `p`: a 2 element static array containing the values for `z` and `m`.
 """
-function ellipse_zero(t::Float64, p::AbstractVector)
-    return @inbounds Elliptic.E(t, p[2]) - p[1]
+function ellipse_zero(y::Float64, p::AbstractVector)
+    return @inbounds Elliptic.E(y, p[2]) - p[1]
 end
 
 # Julia version of functions from https://www.johndcook.com/blog/2022/11/02/ellipse-rng/

@@ -19,5 +19,6 @@ EllipseSampling.eccentricity_squared
 EllipseSampling.circumference
 EllipseSampling.assert_parameters_are_valid
 EllipseSampling.E_inverse
+EllipseSampling.ellipse_zero
 EllipseSampling.calculate_ellipse_parameters
 ```
