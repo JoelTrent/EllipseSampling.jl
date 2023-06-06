@@ -107,7 +107,7 @@ end
 Generates a single point on an ellipse defined by the parameters contained within `e`, at distance `norm_distance_on_perimeter` ``\\times`` `e.circumference` around the circumference. The point is returned as a vector of length two.
 
 # Arguments
-- `norm_distance_on_perimeter`: a number ∈ [0,1] which represents the normalised distance on the perimeter of an ellipse. A value of `0.5` corresponds to a point halfway along the ellipse's perimeter, while a value of `0.7` corresponds to a point 70% along the ellipse's perimeter.
+- `norm_distance_on_perimeter`: a number ∈ [0.0,1.0] which represents the normalised distance on the perimeter of an ellipse. A value of `0.5` corresponds to a point halfway along the ellipse's perimeter, while a value of `0.7` corresponds to a point 70% along the ellipse's perimeter.
 - `e`: a valid [`EllipseSampling.Ellipse`](@ref) struct which defines an ellipse.
 
 # Details
@@ -180,7 +180,7 @@ end
 An alternate way to call [`generate_perimeter_point(norm_distance_on_perimeter::Float64, e::Ellipse)`](@ref), by supplying the parameters of the ellipse to generate a single point on.
 
 # Arguments
-- `norm_distance_on_perimeter`: a number ∈ [0,1] which represents the normalised distance on the perimeter of an ellipse. A value of 0.5 corresponds to a point halfway along the ellipse's perimeter, while a value of 0.7 corresponds to a point 70% along the ellipse's perimeter.
+- `norm_distance_on_perimeter`: a number ∈ [0.0,1.0] which represents the normalised distance on the perimeter of an ellipse. A value of 0.5 corresponds to a point halfway along the ellipse's perimeter, while a value of 0.7 corresponds to a point 70% along the ellipse's perimeter.
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
 - `y_radius`: radius of the ellipse in the y axis (i.e. when the rotation, `α`, is zero).
 - `α`: an angle in radians (0 to 2π) that the ellipse has been rotated by. A positive value represents an anti-clockwise rotation. Default is `0.0`.
@@ -199,7 +199,7 @@ end
 An alternate way to call [`generate_perimeter_point(norm_distance_on_perimeter::Float64, e::Ellipse)`](@ref), by supplying a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest and the confidence level that represent a 2D ellipse approximation of the log-likelihood function.
 
 # Arguments
-- `norm_distance_on_perimeter`: a number ∈ [0,1] which represents the normalised distance on the perimeter of an ellipse. A value of 0.5 corresponds to a point halfway along the ellipse's perimeter, while a value of 0.7 corresponds to a point 70% along the ellipse's perimeter.
+- `norm_distance_on_perimeter`: a number ∈ [0.0,1.0] which represents the normalised distance on the perimeter of an ellipse. A value of 0.5 corresponds to a point halfway along the ellipse's perimeter, while a value of 0.7 corresponds to a point 70% along the ellipse's perimeter.
 - `Γ`: a square matrix (2D) which is the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate.
 - `θmle`: the maximum likelihood estimate for the parameters.
 - `ind1`: index of the first parameter of interest (corresponds to the row and column index of `Γ`)
@@ -224,7 +224,7 @@ Generates `num_points` equally spaced points on an ellipse defined by the parame
 - `e`: a valid [`EllipseSampling.Ellipse`](@ref) struct which defines an ellipse.
 
 # Keyword Arguments
-- `start_point_shift`: a number ∈ [0,1]. Default is `rand()` (defined on [0,1]), meaning that, by default, every time this function is called a different set of points will be generated.
+- `start_point_shift`: a number ∈ [0.0,1.0]. Default is `rand()` (defined on [0.0,1.0]), meaning that, by default, every time this function is called a different set of points will be generated.
 
 # Details
 
@@ -266,7 +266,7 @@ An alternate way to call [`generate_N_equally_spaced_points(num_points::Int, e::
 - `Cy`: the y coordinate of the centre of the ellipse (the translation of the ellipse in the y axis). Default is `0.0`.
 
 # Keyword Arguments
-- `start_point_shift`: a number ∈ [0,1]. Default is `rand()` (defined on [0,1]), meaning that, by default, every time this function is called a different set of points will be generated.
+- `start_point_shift`: a number ∈ [0.0,1.0]. Default is `rand()` (defined on [0.0,1.0]), meaning that, by default, every time this function is called a different set of points will be generated.
 """
 function generate_N_equally_spaced_points(num_points::Int, x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0; 
     start_point_shift::Float64=rand()) where T<:Float64
@@ -289,7 +289,7 @@ An alternate way to call [`generate_N_equally_spaced_points(num_points::Int, e::
 
 # Keyword Arguments
 - `confidence_level`: the confidence level ∈ [0.0,1.0] at which the ellipse approximation is constructed. Default is `0.01`.
-- `start_point_shift`: a number ∈ [0,1]. Default is `rand()` (defined on [0,1]), meaning that, by default, every time this function is called a different set of points will be generated.
+- `start_point_shift`: a number ∈ [0.0,1.0]. Default is `rand()` (defined on [0.0,1.0]), meaning that, by default, every time this function is called a different set of points will be generated.
 """
 function generate_N_equally_spaced_points(num_points::Int, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
     confidence_level::Float64=0.01, start_point_shift::Float64=rand())
@@ -309,8 +309,8 @@ Generates `num_points` spaced points on an ellipse defined by the parameters con
 - `e`: a valid [`EllipseSampling.Ellipse`](@ref) struct which defines an ellipse.
 
 # Keyword Arguments
-- `start_point_shift`: a number ∈ [0,1]. Default is `rand()` (defined on [0,1]), meaning that, by default, every time this function is called a different set of points will be generated.
-- `sqrt_distortion`: a number ∈ [0,1]. Default is `0.0`, meaning that, by default, this function will evenly space points on the the ellipse `e` with respect to the parameter `t`.
+- `start_point_shift`: a number ∈ [0.0,1.0]. Default is `rand()` (defined on [0.0,1.0]), meaning that, by default, every time this function is called a different set of points will be generated.
+- `sqrt_distortion`: a number ∈ [0.0,1.0]. Default is `0.0`, meaning that, by default, this function will evenly space points on the the ellipse `e` with respect to the parameter `t`.
 
 # Details
 
@@ -320,7 +320,7 @@ The impact of using this function is that for all values of `sqrt_distortion < 1
     
 This effect is valuable when using an ellipse as a starting point to find a new level set in 2D (that may be an ellipse) that contains the starting ellipse. If we seek to find the new level set by pushing out from the starting ellipse tangentially at each of the generated points then the points that diverge the fastest are located at the region of greatest curvature. If generated points are equally spaced with respect to arc length, then the new level set is likely to be well defined in regions that are approximately parallel to the major axis of the starting ellipse (and with length on a parallel line of similar length to the major axis, particularly for starting ellipses with a significantly larger major axis), but poorly defined in all other regions. The clustering effect is then valuable as it helps to better define the new level set.   
 
-The function works by defining a new ellipse, `e_new` with minor axis radius equal to the supplied ellipse's minor axis radius (`e_new.b == e.b`) and major axis radius as a function of the supplied ellipse's, `e`, major and minor axis radii and the parameter `sqrt_distortion`. Namely, `e_new.a == e.b + sqrt_distortion^2 * (e.a - e.b)`. `e_new` is contained within `e` and can be varied between a circle and `e` using the parameter `sqrt_distortion` ∈ [0,1]. After defining `e_new` we determine the angle parameters `t_vector` that equally spaces `num_points` on `e_new` with respect to arc length and then find the points on `e` parameterised by the elements of `t_vector`.
+The function works by defining a new ellipse, `e_new` with minor axis radius equal to the supplied ellipse's minor axis radius (`e_new.b == e.b`) and major axis radius as a function of the supplied ellipse's, `e`, major and minor axis radii and the parameter `sqrt_distortion`. Namely, `e_new.a == e.b + sqrt_distortion^2 * (e.a - e.b)`. `e_new` is contained within `e` and can be varied between a circle and `e` using the parameter `sqrt_distortion` ∈ [0.0,1.0]. After defining `e_new` we determine the angle parameters `t_vector` that equally spaces `num_points` on `e_new` with respect to arc length and then find the points on `e` parameterised by the elements of `t_vector`.
 """
 function generate_N_clustered_points(num_points::Int, 
                                     e::Ellipse; 
@@ -373,8 +373,8 @@ An alternate way to call [`generate_N_clustered_points(num_points::Int, e::Ellip
 - `Cy`: the y coordinate of the centre of the ellipse (the translation of the ellipse in the y axis). Default is `0.0`.
 
 # Keyword Arguments
-- `start_point_shift`: a number ∈ [0,1]. Default is `rand()` (defined on [0,1]), meaning that, by default, every time this function is called a different set of points will be generated.
-- `sqrt_distortion`: a number ∈ [0,1]. Default is `0.0`, meaning that, by default, this function will evenly space points on the the ellipse `e` with respect to the parameter `t`.
+- `start_point_shift`: a number ∈ [0.0,1.0]. Default is `rand()` (defined on [0.0,1.0]), meaning that, by default, every time this function is called a different set of points will be generated.
+- `sqrt_distortion`: a number ∈ [0.0,1.0]. Default is `0.0`, meaning that, by default, this function will evenly space points on the the ellipse `e` with respect to the parameter `t`.
 """
 function generate_N_clustered_points(num_points::Int, x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T=0.0; start_point_shift::Float64=rand(), sqrt_distortion::Float64=0.0) where T<:Float64
 
@@ -397,8 +397,8 @@ An alternate way to call [`generate_N_clustered_points(num_points::Int, e::Ellip
 
 # Keyword Arguments
 - `confidence_level`: the confidence level ∈ [0.0,1.0] at which the ellipse approximation is constructed. Default is `0.01`.
-- `start_point_shift`: a number ∈ [0,1]. Default is `rand()` (defined on [0,1]), meaning that, by default, every time this function is called a different set of points will be generated.
-- `sqrt_distortion`: a number ∈ [0,1]. Default is `0.0`, meaning that, by default, this function will evenly space points on the the ellipse `e` with respect to the parameter `t`.
+- `start_point_shift`: a number ∈ [0.0,1.0]. Default is `rand()` (defined on [0.0,1.0]), meaning that, by default, every time this function is called a different set of points will be generated.
+- `sqrt_distortion`: a number ∈ [0.0,1.0]. Default is `0.0`, meaning that, by default, this function will evenly space points on the the ellipse `e` with respect to the parameter `t`.
 """
 function generate_N_clustered_points(num_points::Int, Γ::Matrix{Float64}, θmle::Vector{Float64}, ind1::Int, ind2::Int; 
     confidence_level::Float64=0.01, start_point_shift::Float64=rand(), sqrt_distortion::Float64=0.0)
