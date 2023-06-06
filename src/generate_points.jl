@@ -242,12 +242,11 @@ function generate_N_equally_spaced_points(num_points::Int, e::Ellipse;
 
     shift = start_point_shift/num_points
 
-    lengths = collect(LinRange((shift)*e.circumference, (1+shift)*e.circumference, num_points+1))[1:end-1]
-    angles = t_from_arclength_general.(lengths, Ref(e))
-    
-    for i in 1:num_points
-        points[:,i] .= x_parametric_equation(angles[i], e), 
-            y_parametric_equation(angles[i], e)
+    length_iter = LinRange((shift)*e.circumference, (1+shift)*e.circumference, num_points+1)
+
+    @simd for i in 1:num_points
+        @inbounds angle = t_from_arclength_general(length_iter[i], e)
+        @inbounds points[:,i] .= x_parametric_equation(angle, e), y_parametric_equation(angle, e)
     end
 
     return points
@@ -353,9 +352,8 @@ function generate_N_clustered_points(num_points::Int,
     if e.x_radius < e.y_radius
         angles .= angles .+ 0.5*pi
     end
-    for i in 1:num_points
-        points[:,i] .= x_parametric_equation(angles[i], e), 
-                y_parametric_equation(angles[i], e)
+    @simd for i in 1:num_points
+        @inbounds points[:,i] .= x_parametric_equation(angles[i], e), y_parametric_equation(angles[i], e)
     end
 
     return points
