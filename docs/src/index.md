@@ -18,7 +18,7 @@ To install the package, use the following command inside the Julia REPL:
 
 ```julia
 using Pkg
-Pkg.add(url="https://github.com/JoelTrent/EllipseSampling.jl")
+Pkg.add("EllipseSampling")
 ```
 
 To load the package, use the command:
