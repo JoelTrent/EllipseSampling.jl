@@ -16,7 +16,6 @@ Elliptic = "1"
 Distributions = "0.25"
 SnoopPrecompile = "1"
 Roots = "2"
-StaticArrays = "1.5"
 julia = "1.1"
 
 [extras]
