@@ -19,19 +19,11 @@ function assert_parameters_are_valid(a::T, b::T, x_radius::T, y_radius::T) where
 end
 
 """
-    Ellipse(x_radius::Float64,
-        y_radius::Float64,
-        α::Float64,
-        Cx::Float64,
-        Cy::Float64,
-        a::Float64,
-        b::Float64,
-        m::Float64,
-        circumference::Float64)
+    Ellipse
 
 Contains the information required to define an ellipse which may have been rotated and translated. See [`construct_ellipse`](@ref).
 
-# Arguments
+# Fields
 - `x_radius`: radius of the ellipse in the x axis (i.e. when the rotation, `α`, is zero).
 - `y_radius`: radius of the ellipse in the y axis (i.e. when the rotation, `α`, is zero).
 - `α`: an angle in radians (0 to 2π) that the ellipse has been rotated by. A positive value represents an anti-clockwise rotation.
@@ -40,6 +32,7 @@ Contains the information required to define an ellipse which may have been rotat
 - `a`: the major radius of the ellipse.
 - `b`: the minor radius of the ellipse.
 - `m`: the eccentricity of the ellipse squared. See [`EllipseSampling.eccentricity_squared`](@ref).
+- `em`: complete elliptic integral of the second kind evaluated for the eccentricity squared of the ellipse: `Elliptic.E(m)`. See: [Elliptic.jl](https://github.com/nolta/Elliptic.jl).
 - `circumference`: the circumference of the ellipse.
 """
 struct Ellipse
@@ -51,6 +44,7 @@ struct Ellipse
     a::Float64
     b::Float64
     m::Float64
+    em::Float64
     circumference::Float64
 end
 
@@ -91,7 +85,8 @@ function construct_ellipse(x_radius::T, y_radius::T, α::T=0.0, Cx::T=0.0, Cy::T
     assert_parameters_are_valid(a, b, x_radius, y_radius)
 
     m = eccentricity_squared(a, b)
+    em = Elliptic.E(m)
     C = circumference(a, b)
 
-    return Ellipse(x_radius, y_radius, α, Cx, Cy, a, b, m, C)
+    return Ellipse(x_radius, y_radius, α, Cx, Cy, a, b, m, em, C)
 end

@@ -19,7 +19,7 @@ points=generate_N_equally_spaced_points(9, e; start_point_shift=0.0)
 scatter(points[1,:], points[2,:])
 ```
 
-![](images/equallyspaced1.png)
+![](assets/figures/equallyspaced1.png)
 
 Or alternatively:
 ```julia 
@@ -27,7 +27,7 @@ points=generate_N_equally_spaced_points(9, 1.0, 0.5, 0.0, 2.0, 1.0; start_point_
 scatter(points[1,:], points[2,:])
 ```
 
-![](images/equallyspaced2.png)
+![](assets/figures/equallyspaced2.png)
 
 ### Rotated Ellipses
 
@@ -39,7 +39,7 @@ points=generate_N_equally_spaced_points(9, e; start_point_shift=0.0)
 scatter(points[1,:], points[2,:])
 ```
 
-![](images/equallyspaced3.png)
+![](assets/figures/equallyspaced3.png)
 
 ## Clustered Points
 
@@ -52,7 +52,7 @@ points=generate_N_clustered_points(30, e; start_point_shift=0.0, sqrt_distortion
 scatter(points[1,:], points[2,:])
 ```
 
-![](images/clustered1.png)
+![](assets/figures/clustered1.png)
 
 The clustering effect becomes weaker when we increase the parameter `sqrt_distortion` towards 1.0:
 
@@ -65,7 +65,7 @@ for sqrt_distortion in 0.0:0.2:1.0
 end
 ```
 
-![](images/clustered2.png)
+![](assets/figures/clustered2.png)
 
 The clustering effect is completely gone if our ellipse is a circle:
 
@@ -79,7 +79,7 @@ for sqrt_distortion in 0.0:0.5:1.0
 end
 ```
 
-![](images/clustered3.png)
+![](assets/figures/clustered3.png)
 
 ## Custom Sampling Method
 
@@ -97,4 +97,4 @@ points = reduce(hcat, points)
 scatter(points[1,:], points[2,:])
 ```
 
-![](images/customsampling.png)
+![](assets/figures/customsampling.png)
