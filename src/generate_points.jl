@@ -24,8 +24,6 @@ Julia version of the python function `t_from_length` by [John D. Cook](https://w
 """
 function E_inverse(em::T, z::T, m::T) where T<:Float64
     t = (z/em)*(pi/2)
-    # f(y) = Elliptic.E(y, m) - z
-    # r = Roots.find_zero(f, t, Roots.Order0())
     r = Roots.find_zero(ellipse_zero, t, Roots.Order0(), p=SA[z,m])
     return r
 end
