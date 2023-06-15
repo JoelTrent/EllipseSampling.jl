@@ -1,6 +1,5 @@
 using EllipseSampling
 using Test
-import Pkg; Pkg.add("LinearAlgebra")
 using LinearAlgebra
 import Distributions
 
