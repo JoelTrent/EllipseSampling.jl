@@ -23,11 +23,26 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     (0 < ind1 && ind1 ≤ size(Γ)[1]) || throw(BoundsError("ind1 must be a valid row index in Γ.")) 
     (0 < ind2 && ind2 ≤ size(Γ)[1]) || throw(BoundsError("ind2 must be a valid row index in Γ."))
 
-    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5) # normalise Hw so that the RHS of the ellipse equation == 1
+    # normalise Hw so that the RHS of the ellipse equation == 1
+    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5)
 
     α = atan(2*Hw[1,2]/(Hw[1,1]-Hw[2,2]))/2
-    y_radius = sqrt( (cos(α)^4 - sin(α)^4) / (Hw[2,2]*(cos(α)^2) - Hw[1,1]*(sin(α)^2))  )
-    x_radius = sqrt( (cos(α)^2) / (Hw[1,1] - (sin(α)^2)/y_radius^2))
+    
+    # if α close to +/-0.25pi, +/-1.25pi, then switch to BigFloat precision
+    if isapprox(abs(rem(α/pi, 1)), 0.25, atol=1e-2)
+        
+        # convert values to BigFloat for enhanced precision - required for correct results when α → 0.25pi or 1.25pi.
+        Hw = inv(BigFloat.(Γ[[ind1, ind2], [ind1, ind2]], RoundUp, precision=64)) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5) 
+        
+        α = atan(2*Hw[1,2]/(Hw[1,1]-Hw[2,2]))/2
+        y_radius = sqrt( (cos(α)^4 - sin(α)^4) / (Hw[2,2]*(cos(α)^2) - Hw[1,1]*(sin(α)^2))  )
+        x_radius = sqrt( (cos(α)^2) / (Hw[1,1] - (sin(α)^2)/y_radius^2))
+
+        α, x_radius, y_radius = convert(Float64, α), convert(Float64, x_radius), convert(Float64, y_radius)
+    else
+        y_radius = sqrt( (cos(α)^4 - sin(α)^4) / (Hw[2,2]*(cos(α)^2) - Hw[1,1]*(sin(α)^2))  )
+        x_radius = sqrt( (cos(α)^2) / (Hw[1,1] - (sin(α)^2)/y_radius^2))
+    end
 
     a = max(x_radius, y_radius)
     b = min(x_radius, y_radius)
@@ -40,7 +55,6 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     # eigs = eigvecs(inv(Γ[[2,3], [2,3]]) .* 0.5 ./ (quantile(Chisq(2), 0.95)*0.5))
     # atan(eigs[2,1], eigs[1,1]) # if a is x axis
     # atan(eigs[2,1], eigs[1,1]) + pi/2 # if a is y axis
-
 
     return a, b, x_radius, y_radius, α 
 end
