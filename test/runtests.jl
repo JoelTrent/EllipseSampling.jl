@@ -137,5 +137,24 @@ end
         else
             @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]) + 0.5*pi, α)
         end
+
+        # For issue #30 when α → +/- 0.25 or +/- 1.25
+        a, b = 2.0, 1.0 
+        α = 0.25*π
+
+        Hw11 = (cos(α)^2 / a^2 + sin(α)^2 / b^2)
+        Hw22 = (sin(α)^2 / a^2 + cos(α)^2 / b^2)
+        Hw12 = cos(α)*sin(α)*(1/a^2 - 1/b^2)
+        Hw_norm = [Hw11 Hw12; Hw12 Hw22]
+
+        confidence_level=0.95
+        Hw = Hw_norm ./ (0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5))
+        Γ = convert.(Float64, inv(BigFloat.(Hw, precision=64)))
+
+        a_calc, b_calc, _, _, _ = EllipseSampling.calculate_ellipse_parameters(Γ, 1, 2, confidence_level)
+
+        @test isapprox_ellipsesampling(a, a_calc)
+        @test isapprox_ellipsesampling(b, b_calc)
     end
+
 end
