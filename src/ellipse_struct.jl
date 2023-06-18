@@ -72,7 +72,7 @@ Where:
 A = \\bigg(\\frac{\\cos^2(α)}{a^2} + \\frac{\\sin^2(α)}{b^2}\\bigg)
 ```
 ```math
-B = 2\\cos(α)sin(α)\\bigg(\\frac{1}{a^2} - \\frac{1}{b^2}\\bigg)
+B = 2\\cos(α)\\sin(α)\\bigg(\\frac{1}{a^2} - \\frac{1}{b^2}\\bigg)
 ```
 ```math
 C = \\bigg(\\frac{\\sin^2(α)}{a^2} + \\frac{\\cos^2(α)}{b^2}\\bigg)
