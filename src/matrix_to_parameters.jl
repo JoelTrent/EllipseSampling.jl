@@ -51,10 +51,25 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     # using LinearAlgebra
     # sqrt.(1.0 ./ eigvals(inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5)))
 
+    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level) * 0.5)
+    eigs = eigen(Hw)
+    a_eig, b_eig = sqrt.(1.0 ./ eigs.values)
+
+    # α_eig constructed such that it is the angle in radians from the x axis to the major axis (i.e. x_radius = a_eig) https://cookierobotics.com/007/
+    if Hw[1,2]==0 
+        α_eig = Hw[1,1] ≥ Hw[2,2] ? 0.0 : 0.5π
+    else
+        α_eig = atan(eigs.values[1]-Hw[1,1], Hw[1,2])
+    end
+
+    x_radius = a_eig; y_radius=b_eig
+
     # this method for finding α assumes that a is the x axis
     # eigs = eigvecs(inv(Γ[[2,3], [2,3]]) .* 0.5 ./ (quantile(Chisq(2), 0.95)*0.5))
     # atan(eigs[2,1], eigs[1,1]) # if a is x axis
     # atan(eigs[2,1], eigs[1,1]) + pi/2 # if a is y axis
 
-    return a, b, x_radius, y_radius, α 
+    # return a, b, x_radius, y_radius, α
+    println("Lol")
+    return a_eig, b_eig, x_radius, y_radius, α_eig
 end

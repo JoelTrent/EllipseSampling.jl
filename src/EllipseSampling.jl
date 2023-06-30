@@ -1,7 +1,7 @@
 module EllipseSampling
 
 import Roots, Elliptic, Distributions
-using StaticArrays
+using StaticArrays, LinearAlgebra
 
 export construct_ellipse,
     generate_N_equally_spaced_points, generate_perimeter_point,
