@@ -70,6 +70,5 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     # atan(eigs[2,1], eigs[1,1]) + pi/2 # if a is y axis
 
     # return a, b, x_radius, y_radius, α
-    println("Lol")
     return a_eig, b_eig, x_radius, y_radius, α_eig
 end
