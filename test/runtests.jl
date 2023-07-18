@@ -132,10 +132,13 @@ end
         @test isapprox_ellipsesampling(a_eig, a)
         @test isapprox_ellipsesampling(b_eig, b)
 
+        α_eig = atan(eigvectors[2,1], eigvectors[1,1])
+        if α_eig < 0.0; α_eig += π end
+
         if x_radius > y_radius
-            @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]), α)
+            @test isapprox_ellipsesampling(α_eig, α)
         else
-            @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]) + 0.5*pi, α)
+            @test isapprox_ellipsesampling(α_eig + 0.5*pi, α)
         end
 
         # For issue #30 when α → +/- 0.25 or +/- 1.25

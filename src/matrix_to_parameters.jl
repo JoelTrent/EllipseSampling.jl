@@ -44,6 +44,10 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
         x_radius = sqrt( (cos(α)^2) / (Hw[1,1] - (sin(α)^2)/y_radius^2))
     end
 
+    if α < 0.0
+        α += π # value in interval [0, 2pi]
+    end
+
     a = max(x_radius, y_radius)
     b = min(x_radius, y_radius)
 
@@ -60,6 +64,10 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
         α_eig = Hw[1,1] ≥ Hw[2,2] ? 0.0 : 0.5π
     else
         α_eig = atan(eigs.values[1]-Hw[1,1], Hw[1,2])
+
+        if α_eig < 0.0
+            α_eig += π # value in interval [0, 2pi]
+        end
     end
 
     x_radius = a_eig; y_radius=b_eig
