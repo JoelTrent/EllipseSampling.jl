@@ -5,7 +5,7 @@
 Given a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest and the confidence level to construct a 2D ellipse approximation of the log-likelihood function, return the parameters of that ellipse.
 
 # Arguments
-- `Γ`: a square matrix (2D) which is the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate.
+- `Γ`: a square matrix which is the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate.
 - `ind1`: index of the first parameter of interest (corresponds to the row and column index of `Γ`)
 - `ind2`: index of the second parameter of interest (corresponds to the row and column index of `Γ`).
 - `confidence_level`: the confidence level ∈ [0.0,1.0] at which the ellipse approximation is constructed.
