@@ -14,6 +14,8 @@ Given a square matrix Γ, the inverse of the Hessian of a log-likelihood functio
 The parameters of interest are `a` and `b`, the radius of the major and minor axis respectively, `x_radius` and `y_radius`, the radius of the ellipse in the x and y axis respectively (i.e. the radius when the rotation `α` is zero) and `α`, an angle between 0 and 2π radians that the ellipse has been rotated by. `a` is equal to the maximum of `x_radius` and `y_radius`, while b is equal to the minimum of `x_radius` and `y_radius`.
 
 References and equation(s) to come.
+
+Using eigen directions and values to find the equation for an ellipse: https://www.jstor.org/stable/43288410.
 """
 function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     confidence_level::Float64)
