@@ -30,16 +30,10 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     eigs = eigen(Hw)
     a_eig, b_eig = 1.0 ./ sqrt.(eigs.values)
 
-    # α_eig constructed such that it is the angle in radians from the x axis to the major axis (i.e. x_radius = a_eig) https://cookierobotics.com/007/
-    if Hw[1,2]==0 
-        α_eig = Hw[1,1] ≥ Hw[2,2] ? 0.0 : 0.5π
-    else
-        α_eig = atan(eigs.values[1]-Hw[1,1], Hw[1,2])
-
-        if α_eig < 0.0
-            α_eig += π # value in interval [0, 2pi]
-        end
-    end
+    # α_eig constructed such that it is the angle in radians from the x axis to the major axis, 
+    # i.e. angle between the x axis and the largest eigenvector
+    α_eig = atan(eigs.vectors[2,1], eigs.vectors[1,1])
+    if α_eig < 0.0; α_eig += π end # value in interval [0, pi]
 
     x_radius = a_eig; y_radius=b_eig
     return a_eig, b_eig, x_radius, y_radius, α_eig
