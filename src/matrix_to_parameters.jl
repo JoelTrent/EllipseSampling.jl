@@ -28,7 +28,7 @@ function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
     # normalise Hw so that the RHS of the ellipse equation == 1
     Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level) * 0.5)
     eigs = eigen(Hw)
-    a_eig, b_eig = sqrt.(1.0 ./ eigs.values)
+    a_eig, b_eig = 1.0 ./ sqrt.(eigs.values)
 
     # α_eig constructed such that it is the angle in radians from the x axis to the major axis (i.e. x_radius = a_eig) https://cookierobotics.com/007/
     if Hw[1,2]==0 
