@@ -1,12 +1,16 @@
 using EllipseSampling
-using Documenter
+using Documenter, DocumenterCitations
 
 DocMeta.setdocmeta!(EllipseSampling, :DocTestSetup, :(using EllipseSampling); recursive=true)
+
+bib = CitationBibliography(
+    joinpath(@__DIR__, "src", "refs.bib");
+    style=:numeric
+)
 
 makedocs(;
     modules=[EllipseSampling],
     authors="JoelTrent <79883375+JoelTrent@users.noreply.github.com> and contributors",
-    repo="https://github.com/JoelTrent/EllipseSampling.jl/blob/{commit}{path}#{line}",
     sitename="EllipseSampling.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
@@ -18,8 +22,10 @@ makedocs(;
         "Home" => "index.md",
         "Quick Start" => "quick_start.md",
         "User Interface" => "user_interface.md",
-        "Internal Library" => "internal_library.md"
+        "Internal Library" => "internal_library.md",
+        "References" => "references.md"
     ],
+    plugins=[bib],
 )
 
 deploydocs(;
