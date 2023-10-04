@@ -132,11 +132,10 @@ end
         @test isapprox_ellipsesampling(a_eig, a)
         @test isapprox_ellipsesampling(b_eig, b)
 
-        if x_radius > y_radius
-            @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]), α)
-        else
-            @test isapprox_ellipsesampling(atan(eigvectors[2,1], eigvectors[1,1]) + 0.5*pi, α)
-        end
+        α_eig = atan(eigvectors[2,1], eigvectors[1,1])
+        if α_eig < 0.0; α_eig += π end
+
+        @test isapprox_ellipsesampling(α_eig, α)
 
         # For issue #30 when α → +/- 0.25 or +/- 1.25
         a, b = 2.0, 1.0 
@@ -151,10 +150,11 @@ end
         Hw = Hw_norm ./ (0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level)*0.5))
         Γ = convert.(Float64, inv(BigFloat.(Hw, precision=64)))
 
-        a_calc, b_calc, _, _, _ = EllipseSampling.calculate_ellipse_parameters(Γ, 1, 2, confidence_level)
+        a_calc, b_calc, _, _, α_calc = EllipseSampling.calculate_ellipse_parameters(Γ, 1, 2, confidence_level)
 
         @test isapprox_ellipsesampling(a, a_calc)
         @test isapprox_ellipsesampling(b, b_calc)
+        @test isapprox_ellipsesampling(α, α_calc)
     end
 
 end

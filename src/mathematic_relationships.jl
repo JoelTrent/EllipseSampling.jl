@@ -11,7 +11,6 @@ Computes `m`, the eccentricity of the ellipse squared, ``m=e^2``, where ``m=1-\\
 This relationship between m and e is seen by considering the equation for e: ``e=\\frac{c}{a}``, where ``c^2=\\big(a^2-b^2\\big)`` and ``a>b``.
 
 Replacing c in the equation for e: 
-    
 ```math
 e=\\frac{\\sqrt{a^2-b^2}}{a}
 ```
