@@ -1,14 +1,15 @@
 """
     calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
-        confidence_level::Float64)
+        confidence_level::Float64, dof::Int)
 
-Given a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest and the confidence level to construct a 2D ellipse approximation of the log-likelihood function, return the parameters of that ellipse.
+Given a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest, the confidence level and degrees of freedom used to define ``\\ell_c``, which constructs a 2D ellipse approximation of the log-likelihood function, return the parameters of that ellipse.
 
 # Arguments
 - `Γ`: a square matrix which is the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate.
 - `ind1`: index of the first parameter of interest (corresponds to the row and column index of `Γ`)
 - `ind2`: index of the second parameter of interest (corresponds to the row and column index of `Γ`).
 - `confidence_level`: the confidence level ∈ [0.0,1.0] at which the ellipse approximation is constructed.
+- `dof`: integer degrees of freedom used for calculation of the asymptotic confidence threshold defining the ellipse. Default is `2`.
 
 # Details
 The parameters of interest are `a` and `b`, the radius of the major and minor axis respectively, `x_radius` and `y_radius`, the radius of the ellipse in the x and y axis respectively (i.e. the radius when the rotation `α` is zero) and `α`, an angle between 0 and π radians that the major axis of the ellipse has been rotated by from the positive x axis. `a` is equal to the maximum of `x_radius` and `y_radius`, while `b` is equal to the minimum of `x_radius` and `y_radius`.
@@ -35,7 +36,7 @@ where ``e_j`` and ``e_k`` are the ``j``th and ``k``th canonical vectors of ``\\m
 
 ## Obtaining Ellipse parameters
 
-By normalising our log-likelihood approximation equation for two parameters by our target confidence threshold of interest ``\\ell_c`` (at `confidence_level`) so that one side of the equation is equal to 1 we obtain the equation of an ellipse [friendlyelliptical2013](@cite):
+By normalising our log-likelihood approximation equation for two parameters by our target confidence threshold of interest ``\\ell_c`` (at `confidence_level`, with `dof` degrees of freedom, typically 2) so that one side of the equation is equal to 1 we obtain the equation of an ellipse [friendlyelliptical2013](@cite):
 ```math
 1 = -\\frac{1}{2\\ell_c} (\\psi-\\hat{\\psi})' ([e_j, e_k]' \\, \\Gamma(\\hat{\\theta}) \\, [e_j, e_k])^{-1} (\\psi-\\hat{\\psi}) = (\\psi-\\hat{\\psi})' \\mathcal{C} (\\psi-\\hat{\\psi}),
 ```
@@ -43,15 +44,16 @@ By normalising our log-likelihood approximation equation for two parameters by o
 The major and minor axis radii, `a` and `b` respectively, can then be evaluated by considering the inverse of the square roots of the eigenvalues of ``\\mathcal{C}`` (ordered from largest to smallest) [friendlyelliptical2013](@cite). To determine the rotation, `α` of the major axis of the ellipse from the positive ``x`` axis we calculate the inverse tangent of the division of the ``y`` and ``x`` components of the eigenvector corresponding to the largest eigenvalue [friendlyelliptical2013](@cite). 
 """
 function calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
-    confidence_level::Float64)
+    confidence_level::Float64, dof::Int=2)
 
     (0.0 ≤ confidence_level && confidence_level ≤ 1.0) || throw(DomainError(confidence_level, "confidence_level must be between 0.0 and 1.0."))
+    (2 ≤ dof) || throw(DomainError(dof, "dof must be at least 2"))
     size(Γ)[1] == size(Γ)[2] || throw(DimensionMismatch("Γ must be a square matrix."))
     (0 < ind1 && ind1 ≤ size(Γ)[1]) || throw(BoundsError("ind1 must be a valid row index in Γ.")) 
     (0 < ind2 && ind2 ≤ size(Γ)[1]) || throw(BoundsError("ind2 must be a valid row index in Γ."))
 
     # normalise Hw so that the RHS of the ellipse equation == 1
-    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(2), confidence_level) * 0.5)
+    Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(dof), confidence_level) * 0.5)
     eigs = eigen(Hw)
     a_eig, b_eig = 1.0 ./ sqrt.(eigs.values)
 
