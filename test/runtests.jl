@@ -1,3 +1,4 @@
+using Revise
 using EllipseSampling
 using Test
 using LinearAlgebra
