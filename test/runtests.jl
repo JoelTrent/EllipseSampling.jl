@@ -157,4 +157,44 @@ end
         @test isapprox_ellipsesampling(α, α_calc)
     end
 
+    @testset "CalculateEllipseParametersTest_HigherDof" begin
+        Γ = [7.7862e-6 -0.0506896 -0.0141446; -0.00506896 20.2146 6.61578; -0.0141446 6.61578 30.222]
+        ind1, ind2 = 2, 3
+        confidence_level = 0.01
+        dof=4
+        Hw = inv(Γ[[ind1, ind2], [ind1, ind2]]) .* 0.5 ./ (Distributions.quantile(Distributions.Chisq(dof), confidence_level)*0.5)
+        eigs = eigen(Hw)
+        a_eig, b_eig = sqrt.(1.0 ./ eigs.values)
+        eigvectors = eigs.vectors
+
+        a, b, x_radius, y_radius, α  = EllipseSampling.calculate_ellipse_parameters(Γ, ind1, ind2, confidence_level, dof)
+
+        @test isapprox_ellipsesampling(a_eig, a)
+        @test isapprox_ellipsesampling(b_eig, b)
+
+        α_eig = atan(eigvectors[2,1], eigvectors[1,1])
+        if α_eig < 0.0; α_eig += π end
+
+        @test isapprox_ellipsesampling(α_eig, α)
+
+        # For issue #30 when α → +/- 0.25 or +/- 1.25
+        a, b = 2.0, 1.0 
+        α = 0.25*π
+
+        Hw11 = (cos(α)^2 / a^2 + sin(α)^2 / b^2)
+        Hw22 = (sin(α)^2 / a^2 + cos(α)^2 / b^2)
+        Hw12 = cos(α)*sin(α)*(1/a^2 - 1/b^2)
+        Hw_norm = [Hw11 Hw12; Hw12 Hw22]
+
+        confidence_level=0.95
+        Hw = Hw_norm ./ (0.5 ./ (Distributions.quantile(Distributions.Chisq(dof), confidence_level)*0.5))
+        Γ = convert.(Float64, inv(BigFloat.(Hw, precision=64)))
+
+        a_calc, b_calc, _, _, α_calc = EllipseSampling.calculate_ellipse_parameters(Γ, 1, 2, confidence_level, dof)
+
+        @test isapprox_ellipsesampling(a, a_calc)
+        @test isapprox_ellipsesampling(b, b_calc)
+        @test isapprox_ellipsesampling(α, α_calc)
+    end
+
 end
