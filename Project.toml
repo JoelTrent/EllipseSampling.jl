@@ -1,7 +1,7 @@
 name = "EllipseSampling"
 uuid = "7d220c50-6298-48cd-9710-1d1a8ef13806"
 authors = ["JoelTrent <79883375+JoelTrent@users.noreply.github.com> and contributors"]
-version = "0.2.0"
+version = "0.1.4"
 
 [deps]
 Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"

@@ -1,4 +1,3 @@
-using Revise
 using EllipseSampling
 using Documenter, DocumenterCitations
 
