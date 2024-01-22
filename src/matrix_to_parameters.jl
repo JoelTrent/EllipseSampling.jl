@@ -1,6 +1,6 @@
 """
     calculate_ellipse_parameters(Γ::Matrix{Float64}, ind1::Int, ind2::Int,
-        confidence_level::Float64, dof::Int)
+        confidence_level::Float64, dof::Int=2)
 
 Given a square matrix Γ, the inverse of the Hessian of a log-likelihood function at its maximum likelihood estimate, indexes of the two variables of interest, the confidence level and degrees of freedom used to define ``\\ell_c``, which constructs a 2D ellipse approximation of the log-likelihood function, return the parameters of that ellipse.
 
